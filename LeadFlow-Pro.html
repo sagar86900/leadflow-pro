@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LeadFlow Pro — USA Lead CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c14;--surface:#0d1420;--surface2:#131c2e;--border:#1e2d47;
+  --accent:#00d4ff;--accent2:#7b61ff;--green:#00e676;--red:#ff4d6d;
+  --yellow:#ffd60a;--text:#e8f0fe;--muted:#5a7a9a;
+  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.fade{animation:fadeIn .4s ease both}
+
+/* HEADER */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;
+  display:flex;align-items:center;gap:12;height:60px;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.logo{font-family:var(--fh);font-size:20px;font-weight:800;
+  background:linear-gradient(135deg,#00d4ff,#7b61ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-right:8px}
+.logo-tag{font-size:11px;color:var(--muted);background:var(--surface2);padding:3px 10px;
+  border-radius:20px;border:1px solid var(--border)}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav-btn{background:transparent;border:1px solid transparent;color:var(--muted);
+  border-radius:10px;padding:6px 14px;cursor:pointer;font-size:13px;font-weight:500;
+  transition:all .2s;font-family:var(--fb)}
+.nav-btn.active{background:var(--surface2);border-color:var(--border);color:var(--accent)}
+.nav-btn:hover{color:var(--text)}
+
+/* MAIN */
+main{max-width:1300px;margin:0 auto;padding:28px;width:100%}
+.page{display:none}.page.active{display:block;animation:fadeIn .4s ease}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px}
+.card-title{font-family:var(--fh);font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:20px 24px;position:relative;overflow:hidden}
+.stat-icon{font-size:26px;margin-bottom:8px}
+.stat-value{font-family:var(--fh);font-size:28px;font-weight:800}
+.stat-label{font-size:13px;color:var(--muted);margin-top:4px}
+.stat-sub{font-size:11px;margin-top:6px;padding:2px 8px;border-radius:20px;display:inline-block}
+
+/* GRID 2 */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+
+/* BUTTONS */
+.btn{border:none;border-radius:10px;padding:9px 18px;cursor:pointer;font-size:13px;
+  font-weight:600;font-family:var(--fb);transition:all .2s;display:inline-flex;
+  align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{transform:translateY(-1px);opacity:.9}
+.btn-primary{background:linear-gradient(135deg,#00d4ff,#0099bb);color:#000}
+.btn-purple{background:linear-gradient(135deg,#7b61ff,#5a3fd4);color:#fff}
+.btn-green{background:linear-gradient(135deg,#00e676,#00b248);color:#000}
+.btn-gray{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-danger{background:#ff4d6d22;color:#ff4d6d;border:1px solid #ff4d6d44}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* INPUT */
+.inp{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:9px 14px;color:var(--text);font-size:13px;font-family:var(--fb);
+  outline:none;width:100%;transition:border .2s}
+.inp:focus{border-color:var(--accent)}
+select.inp{cursor:pointer}
+textarea.inp{resize:vertical;min-height:80px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+td{padding:11px 14px;font-size:13px;border-bottom:1px solid #1e2d4722;vertical-align:middle}
+tr:hover td{background:#ffffff04}
+.table-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--border)}
+
+/* BADGE / TAG */
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.tag{font-size:11px;padding:2px 8px;border-radius:20px;display:inline-block;margin-right:4px}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:#000b;z-index:200;display:flex;
+  align-items:center;justify-content:center;animation:fadeIn .2s ease}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:28px;width:min(480px,94vw);max-height:90vh;overflow-y:auto}
+.modal-title{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:18px}
+.form-label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}
+.form-group{margin-bottom:14px}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;z-index:300;border-radius:12px;
+  padding:12px 20px;font-size:13px;font-weight:600;animation:fadeIn .3s ease;
+  display:none;backdrop-filter:blur(10px)}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--surface2);border-radius:10px;height:18px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,#00d4ff,#7b61ff);
+  border-radius:10px;transition:width 1s ease;min-width:0}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-title{font-family:var(--fh);font-size:18px;color:var(--text);margin-bottom:8px}
+
+/* TPLATES */
+.tpl-list{display:flex;flex-direction:column;gap:10px}
+.tpl-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;cursor:pointer;transition:all .2s}
+.tpl-item:hover,.tpl-item.active{border-color:var(--accent);background:var(--surface2)}
+.tpl-grid{display:grid;grid-template-columns:260px 1fr;gap:20px}
+@media(max-width:700px){.tpl-grid{grid-template-columns:1fr}}
+
+/* GUIDE STEPS */
+.guide-step{display:flex;gap:20px;margin-bottom:16px;animation:fadeIn .4s ease both}
+.step-num{flex-shrink:0;width:54px;height:54px;border-radius:16px;display:flex;
+  align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:18px}
+
+/* INCOME GRID */
+.income-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+@media(max-width:600px){.income-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <span style="font-size:22px">📍</span>
+  <div class="logo">LeadFlow Pro</div>
+  <span class="logo-tag">USA Web Leads CRM</span>
+  <nav>
+    <button class="nav-btn active" onclick="showTab('dashboard',this)">📊 Dashboard</button>
+    <button class="nav-btn" onclick="showTab('leads',this)">📋 Leads</button>
+    <button class="nav-btn" onclick="showTab('revenue',this)">💰 Revenue</button>
+    <button class="nav-btn" onclick="showTab('templates',this)">📧 Templates</button>
+    <button class="nav-btn" onclick="showTab('guide',this)">📖 Guide</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ═══════════════ DASHBOARD ═══════════════ -->
+<div id="page-dashboard" class="page active">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1 style="font-family:var(--fh);font-size:26px;font-weight:800">Welcome Back 👋</h1>
+      <p style="color:var(--muted);font-size:13px;margin-top:4px" id="dash-date"></p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input type="file" id="csv-import" accept=".csv" style="display:none" onchange="importCSV(event)"/>
+      <button class="btn btn-purple" onclick="document.getElementById('csv-import').click()">📥 Import from Extension</button>
+      <button class="btn btn-primary" onclick="openAddModal()">➕ Add Lead</button>
+    </div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stats-grid" id="stat-cards"></div>
+
+  <!-- Charts Row -->
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📊 Lead Status Breakdown</div>
+      <div id="donut-section" style="display:flex;align-items:center;gap:24px">
+        <svg id="donut-svg" width="120" height="120" viewBox="0 0 120 120"></svg>
+        <div id="donut-legend" style="flex:1"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 Recent Deals</div>
+      <div id="recent-deals"></div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="card">
+    <div class="card-title">⚡ Quick Actions</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn btn-purple" onclick="document.getElementById('csv-import').click()">📥 Import CSV from Extension</button>
+      <button class="btn btn-primary" onclick="openAddModal()">➕ Add Lead Manually</button>
+      <button class="btn btn-green" onclick="exportLeads()">📤 Export All Leads</button>
+      <button class="btn btn-gray" onclick="showTab('templates',document.querySelectorAll('.nav-btn')[3])">📧 Email Templates</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LEADS ═══════════════ -->
+<div id="page-leads" class="page">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <h2 style="font-family:var(--fh);font-size:22px;font-weight:800">📋 All Leads <span id="leads-count" style="font-size:14px;color:var(--muted);font-weight:400"></span></h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-purple" onclick="document.getElementById('csv-import').click()">📥 Import</button>
+      <button class="btn btn-green" onclick="exportLeads()">📤 Export</button>
+      <button class="btn btn-primary" onclick="openAddModal()">➕ Add Lead</button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+    <input class="inp" style="max-width:260px" placeholder="🔍 Search name, city, phone..." id="search-inp" oninput="renderLeadsTable()"/>
+    <select class="inp" style="width:auto" id="filter-status" onchange="renderLeadsTable()">
+      <option value="">All Status</option>
+      <option>Not Contacted</option><option>Contacted</option><option>Interested</option>
+      <option>Proposal Sent</option><option>Won</option><option>Lost</option>
+    </select>
+    <select class="inp" style="width:auto" id="filter-cat" onchange="renderLeadsTable()">
+      <option value="">All Categories</option>
+      <option>Barber Shop</option><option>Plumber</option><option>Nail Salon</option>
+      <option>Auto Repair</option><option>Cleaning Service</option><option>Restaurant</option>
+      <option>Electrician</option><option>HVAC</option><option>Landscaping</option><option>Other</option>
+    </select>
+  </div>
+
+  <div id="leads-table-wrap"></div>
+</div>
+
+<!-- ═══════════════ REVENUE ═══════════════ -->
+<div id="page-revenue" class="page">
+  <h2 style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:20px">💰 Revenue Tracker</h2>
+  <div class="stats-grid" id="rev-stats"></div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">📈 Monthly Revenue Progress (Target: $2,000)</div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px">
+      <span>$0</span><span>$2,000</span>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bar" id="rev-prog" style="width:0%"></div>
+    </div>
+    <div style="font-size:12px;color:var(--accent);margin-top:6px" id="rev-prog-text"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 All Deals</div>
+    <div id="rev-table"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ TEMPLATES ═══════════════ -->
+<div id="page-templates" class="page">
+  <h2 style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:20px">📧 Email Templates</h2>
+  <div class="tpl-grid">
+    <div class="tpl-list" id="tpl-list"></div>
+    <div class="card" id="tpl-preview">
+      <div class="empty"><div class="empty-icon">📧</div>Select a template</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ GUIDE ═══════════════ -->
+<div id="page-guide" class="page">
+  <h2 style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:20px">📖 How To Use — Step by Step</h2>
+  <div id="guide-steps"></div>
+
+  <div class="card" style="background:linear-gradient(135deg,#0d1f3c,#1a0d3c);border-color:#7b61ff44;text-align:center;padding:32px;margin-top:8px">
+    <div style="font-size:36px;margin-bottom:12px">💰</div>
+    <div style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:8px">Expected Monthly Income</div>
+    <div class="income-grid">
+      <div style="background:#ffffff08;border-radius:14px;padding:16px;border:1px solid #ffffff12">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Month 1</div>
+        <div style="font-family:var(--fh);font-size:22px;font-weight:800;color:#00e676">$300–600</div>
+        <div style="font-size:12px;color:#7b61ff;margin:4px 0">₨84k–168k</div>
+        <div style="font-size:11px;color:var(--muted)">Learning phase</div>
+      </div>
+      <div style="background:#ffffff08;border-radius:14px;padding:16px;border:1px solid #ffffff12">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Month 2–3</div>
+        <div style="font-family:var(--fh);font-size:22px;font-weight:800;color:#00e676">$600–1,200</div>
+        <div style="font-size:12px;color:#7b61ff;margin:4px 0">₨168k–336k</div>
+        <div style="font-size:11px;color:var(--muted)">Getting referrals</div>
+      </div>
+      <div style="background:#ffffff08;border-radius:14px;padding:16px;border:1px solid #ffffff12">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Month 4+</div>
+        <div style="font-family:var(--fh);font-size:22px;font-weight:800;color:#00e676">$1,500–3,000</div>
+        <div style="font-size:12px;color:#7b61ff;margin:4px 0">₨420k–840k</div>
+        <div style="font-size:11px;color:var(--muted)">Scaling up</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ADD LEAD MODAL -->
+<div class="overlay" id="add-modal" style="display:none" onclick="if(event.target===this)closeAddModal()">
+  <div class="modal">
+    <div class="modal-title">➕ Add Lead Manually</div>
+    <div class="form-group">
+      <label class="form-label">Business Name *</label>
+      <input class="inp" id="nl-name" placeholder="e.g. Mike's Barber Shop"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="inp" id="nl-cat">
+        <option>Barber Shop</option><option>Plumber</option><option>Nail Salon</option>
+        <option>Auto Repair</option><option>Cleaning Service</option><option>Restaurant</option>
+        <option>Electrician</option><option>HVAC</option><option>Landscaping</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">City</label>
+      <input class="inp" id="nl-city" placeholder="e.g. San Antonio"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Phone</label>
+      <input class="inp" id="nl-phone" placeholder="e.g. +1 210 555 0100"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Address</label>
+      <input class="inp" id="nl-address" placeholder="Full address"/>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn btn-gray" style="flex:1" onclick="closeAddModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="addLead()">✅ Add Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEAL MODAL -->
+<div class="overlay" id="deal-modal" style="display:none" onclick="if(event.target===this)closeDealModal()">
+  <div class="modal">
+    <div class="modal-title">🎉 Record Deal — <span id="deal-name"></span></div>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Congratulations! Enter the deal amount.</p>
+    <div class="form-group">
+      <label class="form-label">Deal Amount (USD) *</label>
+      <input class="inp" type="number" id="deal-amount" placeholder="e.g. 299" oninput="updatePKR()"/>
+      <div style="font-size:12px;color:#7b61ff;margin-top:5px" id="deal-pkr"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Note (optional)</label>
+      <input class="inp" id="deal-note" placeholder="e.g. Basic website, paid via Payoneer"/>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-gray" style="flex:1" onclick="closeDealModal()">Cancel</button>
+      <button class="btn btn-green" style="flex:1" onclick="saveDeal()">💰 Save Deal</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const STATUS_COLORS = {
+  "Not Contacted":"#5a7a9a","Contacted":"#00d4ff","Interested":"#7b61ff",
+  "Proposal Sent":"#ffd60a","Won":"#00e676","Lost":"#ff4d6d"
+};
+const TEMPLATES = [
+  {id:1,name:"Friendly Intro 👋",subject:"Quick Question About [Business Name]",
+   body:`Hi there!\n\nI was searching for [business type] in [City] on Google Maps and came across your business — [Business Name].\n\nI noticed you don't have a website yet. Most customers search online before visiting. Without a website, you could be missing 30–50% of potential customers every day.\n\nI build professional websites for local businesses starting at just $299 — one-time fee.\n\n✅ Home, About, Services & Contact pages\n✅ Mobile-friendly design\n✅ Google Maps optimized\n✅ Ready in 5–7 days\n\nWould you be open to a quick 10-minute call this week?\n\nBest,\n[Your Name]\n[Phone / WhatsApp]`},
+  {id:2,name:"Urgent & Direct 🔥",subject:"Your Competitors Are Getting Your Customers",
+   body:`Hi [Business Name] Team,\n\nI'll be direct — I searched for [business type] in [City] today, and your competitors with websites are showing up first on Google.\n\nEvery customer searching online is going to THEM, not you.\n\nI specialize in affordable websites for local businesses.\n\n💰 Price: $299 one-time\n⏱ Delivery: 5–7 days\n📱 Mobile-friendly + Google optimized\n\nReply and I'll send you a FREE sample design — no obligation.\n\nTalk soon,\n[Your Name]\n📞 [Phone Number]`},
+  {id:3,name:"Follow-Up Message 📩",subject:"Re: Website for [Business Name]",
+   body:`Hi again!\n\nI reached out a few days ago about building a website for [Business Name].\n\nThis month only — website for just $249 (normally $399).\n\nSuper easy process for you:\n1️⃣ You answer 5 simple questions\n2️⃣ I build everything\n3️⃣ You approve and go live\n\nNo technical knowledge needed from your side.\n\nBest,\n[Your Name]\n[Contact Info]`},
+];
+const GUIDE_STEPS = [
+  {n:"01",title:"Install Chrome Extension",color:"#00d4ff",
+   desc:"Download the Chrome Extension ZIP. Go to chrome://extensions → Developer Mode ON → Load Unpacked → Select folder.",
+   tips:["Extension icon dikh jaayega browser mein","Google Maps pe jaao pehle"]},
+  {n:"02",title:"Search on Google Maps",color:"#7b61ff",
+   desc:"Google Maps pe jaao. Search karo: 'barber shop San Antonio TX' ya 'plumber McAllen TX'.",
+   tips:["San Antonio TX se shuru karo","Barber + Plumber + Nail Salon best hain"]},
+  {n:"03",title:"Scan with Extension",color:"#00e676",
+   desc:"Extension icon click → 'Scan Karo' button dabao → Website nahi wale filter honge.",
+   tips:["Maps mein scroll karo zyada results ke liye","Multiple searches karo"]},
+  {n:"04",title:"Export CSV & Import Here",color:"#ffd60a",
+   desc:"Extension mein 'CSV Export' karo. Phir is website mein 'Import from Extension' se CSV upload karo.",
+   tips:["Sab leads yahan save honge","Status track kar sakte ho"]},
+  {n:"05",title:"Contact Businesses",color:"#ff6b9d",
+   desc:"Templates tab se email copy karo. Phone number se call karo ya email bhejo.",
+   tips:["Phone call 3x zyada effective hai","Roz 20-30 contact karo"]},
+  {n:"06",title:"Close Deal & Track Revenue",color:"#00d4ff",
+   desc:"Koi interested ho → Status 'Won' karo → Deal amount enter karo. Revenue tab mein track hoga.",
+   tips:["$299 se shuru karo","Monthly maintenance $50/mo extra"]},
+];
+
+// ═══════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════
+function getLeads(){try{return JSON.parse(localStorage.getItem("lf_leads")||"[]")}catch{return[]}}
+function saveLeads(d){localStorage.setItem("lf_leads",JSON.stringify(d))}
+function getRevenue(){try{return JSON.parse(localStorage.getItem("lf_rev")||"[]")}catch{return[]}}
+function saveRevenue(d){localStorage.setItem("lf_rev",JSON.stringify(d))}
+function uid(){return Math.random().toString(36).slice(2,9)}
+function now(){return new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}
+function fmt(n){return(n||0).toLocaleString()}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+function toast(msg,type="ok"){
+  const el=document.getElementById("toast");
+  el.textContent=msg;
+  el.style.display="block";
+  el.style.background=type==="err"?"#ff4d6d22":"#00e67622";
+  el.style.border=`1px solid ${type==="err"?"#ff4d6d66":"#00e67666"}`;
+  el.style.color=type==="err"?"#ff4d6d":"#00e676";
+  setTimeout(()=>el.style.display="none",3000);
+}
+
+// ═══════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════
+function showTab(name,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+name).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  if(name==="dashboard") renderDashboard();
+  if(name==="leads") renderLeadsTable();
+  if(name==="revenue") renderRevenue();
+  if(name==="templates") renderTemplates();
+  if(name==="guide") renderGuide();
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+function renderDashboard(){
+  document.getElementById("dash-date").textContent=now()+" — Here's your overview";
+  const leads=getLeads(), rev=getRevenue();
+  const won=leads.filter(l=>l.status==="Won").length;
+  const contacted=leads.filter(l=>l.status!=="Not Contacted").length;
+  const totalRev=rev.reduce((s,d)=>s+d.amount,0);
+  const conv=leads.length?Math.round((won/leads.length)*100):0;
+
+  document.getElementById("stat-cards").innerHTML=`
+    ${statCard("📋","Total Leads",fmt(leads.length),"","#00d4ff")}
+    ${statCard("📞","Contacted",fmt(contacted),`${leads.length?Math.round((contacted/leads.length)*100):0}% of total`,"#7b61ff")}
+    ${statCard("🏆","Deals Won",fmt(won),`${conv}% conversion`,"#00e676")}
+    ${statCard("💵","Total Revenue","$"+fmt(totalRev),won?"$"+Math.round(totalRev/won)+" avg":""," #ffd60a")}
+  `;
+
+  // Donut
+  const counts={};
+  leads.forEach(l=>counts[l.status]=(counts[l.status]||0)+1);
+  const data=Object.entries(counts).map(([s,v])=>({label:s,value:v,color:STATUS_COLORS[s]||"#5a7a9a"}));
+  const total=leads.length||1;
+  const r=40,circ=2*Math.PI*r;
+  let offset=0,segs="";
+  if(leads.length===0){
+    segs=`<circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--border)" stroke-width="14"/>`;
+  } else {
+    data.forEach(d=>{
+      const pct=d.value/total,dash=pct*circ,gap=circ-dash;
+      segs+=`<circle cx="60" cy="60" r="${r}" fill="none" stroke="${d.color}" stroke-width="14"
+        stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-offset*circ}"
+        style="transform:rotate(-90deg);transform-origin:center"/>`;
+      offset+=pct;
+    });
+  }
+  segs+=`<text x="60" y="58" text-anchor="middle" fill="var(--text)" style="font-size:18px;font-weight:800;font-family:var(--fh)">${leads.length}</text>
+         <text x="60" y="74" text-anchor="middle" fill="var(--muted)" style="font-size:10px">Total</text>`;
+  document.getElementById("donut-svg").innerHTML=segs;
+
+  let legend="";
+  if(leads.length===0){
+    legend=`<div style="color:var(--muted);font-size:13px">No leads yet</div>`;
+  } else {
+    data.forEach(d=>{
+      legend+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:10px;height:10px;border-radius:50%;background:${d.color}"></div>
+          <span style="font-size:12px;color:var(--muted)">${d.label}</span>
+        </div>
+        <span style="font-size:13px;font-weight:700;color:${d.color}">${d.value}</span>
+      </div>`;
+    });
+  }
+  document.getElementById("donut-legend").innerHTML=legend;
+
+  // Recent deals
+  let dealsHtml="";
+  if(rev.length===0){
+    dealsHtml=`<div style="color:var(--muted);font-size:13px;text-align:center;padding:24px">No deals yet. Mark a lead as Won!</div>`;
+  } else {
+    rev.slice(0,5).forEach(d=>{
+      dealsHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-radius:10px;margin-bottom:8px">
+        <div>
+          <div style="font-size:13px;font-weight:600">${d.leadName}</div>
+          <div style="font-size:11px;color:var(--muted)">${d.date}${d.note?" • "+d.note:""}</div>
+        </div>
+        <div style="font-family:var(--fh);font-size:18px;font-weight:800;color:#00e676">$${d.amount}</div>
+      </div>`;
+    });
+  }
+  document.getElementById("recent-deals").innerHTML=dealsHtml;
+}
+
+function statCard(icon,label,value,sub,color){
+  return `<div class="stat-card">
+    <div style="position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle at top right,${color}18,transparent 70%)"></div>
+    <div class="stat-icon">${icon}</div>
+    <div class="stat-value" style="color:${color}">${value}</div>
+    <div class="stat-label">${label}</div>
+    ${sub?`<div class="stat-sub" style="background:${color}15;color:${color}">${sub}</div>`:""}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+// LEADS TABLE
+// ═══════════════════════════════════════════
+function renderLeadsTable(){
+  const leads=getLeads();
+  const q=document.getElementById("search-inp")?.value.toLowerCase()||"";
+  const fs=document.getElementById("filter-status")?.value||"";
+  const fc=document.getElementById("filter-cat")?.value||"";
+
+  const filtered=leads.filter(l=>{
+    const ms=!q||l.name?.toLowerCase().includes(q)||l.city?.toLowerCase().includes(q)||l.phone?.includes(q);
+    const mst=!fs||l.status===fs;
+    const mc=!fc||l.category===fc;
+    return ms&&mst&&mc;
+  });
+
+  document.getElementById("leads-count").textContent=`${filtered.length} of ${leads.length}`;
+
+  if(filtered.length===0){
+    document.getElementById("leads-table-wrap").innerHTML=`
+      <div class="card empty">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-title">No leads found</div>
+        <div style="margin-bottom:20px">Import CSV from your Chrome extension or add manually</div>
+        <button class="btn btn-purple" onclick="document.getElementById('csv-import').click()">📥 Import from Extension</button>
+      </div>`;
+    return;
+  }
+
+  let rows="";
+  filtered.forEach((l,i)=>{
+    const c=STATUS_COLORS[l.status]||"#5a7a9a";
+    rows+=`<tr>
+      <td><div style="font-weight:600">${l.name}</div><div style="font-size:11px;color:var(--muted)">${l.addedOn||""}</div></td>
+      <td><span class="tag" style="background:#00d4ff18;color:#00d4ff;border:1px solid #00d4ff30">${l.category||"—"}</span></td>
+      <td style="color:var(--muted);font-size:12px">${l.city||"—"}</td>
+      <td>${l.phone?`<a href="tel:${l.phone}" style="color:var(--accent);font-size:12px;text-decoration:none">📞 ${l.phone}</a>`:"—"}</td>
+      <td>
+        <select class="inp" style="font-size:11px;padding:4px 8px;width:auto"
+          onchange="updateLeadStatus('${l.id}',this.value)">
+          ${Object.keys(STATUS_COLORS).map(s=>`<option ${l.status===s?"selected":""}>${s}</option>`).join("")}
+        </select>
+      </td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-green" style="padding:4px 10px;font-size:11px"
+            onclick="openDealModal('${l.id}')">💰 Won</button>
+          <button class="btn btn-danger" style="padding:4px 10px;font-size:11px"
+            onclick="deleteLead('${l.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  document.getElementById("leads-table-wrap").innerHTML=`
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Business</th><th>Category</th><th>City</th><th>Phone</th><th>Status</th><th>Action</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function updateLeadStatus(id,status){
+  const leads=getLeads();
+  const idx=leads.findIndex(l=>l.id===id);
+  if(idx>-1){leads[idx].status=status;saveLeads(leads);}
+}
+
+function deleteLead(id){
+  if(!confirm("Delete this lead?")) return;
+  saveLeads(getLeads().filter(l=>l.id!==id));
+  renderLeadsTable();
+  toast("🗑️ Lead removed","err");
+}
+
+// ═══════════════════════════════════════════
+// ADD LEAD MODAL
+// ═══════════════════════════════════════════
+function openAddModal(){document.getElementById("add-modal").style.display="flex"}
+function closeAddModal(){document.getElementById("add-modal").style.display="none"}
+function addLead(){
+  const name=document.getElementById("nl-name").value.trim();
+  if(!name){toast("Business name required!","err");return;}
+  const lead={
+    id:uid(),name,
+    category:document.getElementById("nl-cat").value,
+    city:document.getElementById("nl-city").value.trim(),
+    phone:document.getElementById("nl-phone").value.trim(),
+    address:document.getElementById("nl-address").value.trim(),
+    status:"Not Contacted",addedOn:now()
+  };
+  const leads=getLeads();leads.push(lead);saveLeads(leads);
+  closeAddModal();
+  ["nl-name","nl-city","nl-phone","nl-address"].forEach(id=>document.getElementById(id).value="");
+  renderLeadsTable();
+  toast("✅ Lead added!");
+}
+
+// ═══════════════════════════════════════════
+// DEAL MODAL
+// ═══════════════════════════════════════════
+let currentDealId=null;
+function openDealModal(id){
+  const lead=getLeads().find(l=>l.id===id);
+  if(!lead) return;
+  currentDealId=id;
+  document.getElementById("deal-name").textContent=lead.name;
+  document.getElementById("deal-amount").value="";
+  document.getElementById("deal-note").value="";
+  document.getElementById("deal-pkr").textContent="";
+  document.getElementById("deal-modal").style.display="flex";
+}
+function closeDealModal(){document.getElementById("deal-modal").style.display="none";currentDealId=null;}
+function updatePKR(){
+  const v=parseFloat(document.getElementById("deal-amount").value)||0;
+  document.getElementById("deal-pkr").textContent=v?`= ₨${fmt(Math.round(v*280))} PKR`:"";
+}
+function saveDeal(){
+  const amount=parseFloat(document.getElementById("deal-amount").value);
+  if(!amount||amount<=0){toast("Enter a valid amount!","err");return;}
+  const note=document.getElementById("deal-note").value.trim();
+  const lead=getLeads().find(l=>l.id===currentDealId);
+  const deal={id:uid(),leadName:lead?.name||"",amount,note,date:now()};
+  const rev=getRevenue();rev.unshift(deal);saveRevenue(rev);
+  updateLeadStatus(currentDealId,"Won");
+  closeDealModal();
+  renderLeadsTable();
+  toast(`💰 $${amount} deal recorded!`);
+}
+
+// ═══════════════════════════════════════════
+// REVENUE
+// ═══════════════════════════════════════════
+function renderRevenue(){
+  const rev=getRevenue();
+  const leads=getLeads();
+  const total=rev.reduce((s,d)=>s+d.amount,0);
+  const won=leads.filter(l=>l.status==="Won").length;
+
+  document.getElementById("rev-stats").innerHTML=`
+    ${statCard("💵","Total Earned","$"+fmt(total),"","#00e676")}
+    ${statCard("🤝","Deals Closed",fmt(rev.length),"","#00d4ff")}
+    ${statCard("📊","Avg Deal Size","$"+(rev.length?Math.round(total/rev.length):0),"","#ffd60a")}
+    ${statCard("🇵🇰","In PKR","₨"+fmt(Math.round(total*280)),"at 280 PKR/USD","#7b61ff")}
+  `;
+
+  const pct=Math.min((total/2000)*100,100);
+  document.getElementById("rev-prog").style.width=pct+"%";
+  document.getElementById("rev-prog-text").textContent=`$${total} / $2,000 (${Math.round(pct)}%)`;
+
+  if(rev.length===0){
+    document.getElementById("rev-table").innerHTML=`<div style="text-align:center;padding:32px;color:var(--muted)">No deals yet. Go to Leads tab and mark a lead as Won!</div>`;
+    return;
+  }
+
+  let rows="";
+  rev.forEach(d=>{
+    rows+=`<tr>
+      <td><b>${d.leadName}</b></td>
+      <td style="color:#00e676;font-weight:800;font-family:var(--fh)">$${d.amount}</td>
+      <td style="color:#7b61ff;font-size:12px">₨${fmt(Math.round(d.amount*280))}</td>
+      <td style="color:var(--muted);font-size:12px">${d.date}</td>
+      <td style="color:var(--muted);font-size:12px">${d.note||"—"}</td>
+    </tr>`;
+  });
+
+  document.getElementById("rev-table").innerHTML=`
+    <table>
+      <thead><tr><th>Client</th><th>Amount</th><th>PKR Value</th><th>Date</th><th>Note</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ═══════════════════════════════════════════
+// TEMPLATES
+// ═══════════════════════════════════════════
+let activeTpl=TEMPLATES[0];
+function renderTemplates(){
+  let list="";
+  TEMPLATES.forEach(t=>{
+    list+=`<div class="tpl-item ${activeTpl?.id===t.id?"active":""}" onclick="selectTpl(${t.id})">
+      <div style="font-weight:700;font-size:14px;margin-bottom:4px">${t.name}</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.4">${t.subject}</div>
+    </div>`;
+  });
+  document.getElementById("tpl-list").innerHTML=list;
+  if(activeTpl) showTplPreview();
+}
+function selectTpl(id){activeTpl=TEMPLATES.find(t=>t.id===id);renderTemplates();}
+function showTplPreview(){
+  document.getElementById("tpl-preview").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="font-family:var(--fh);font-size:18px;font-weight:700">${activeTpl.name}</div>
+      <button class="btn btn-primary" onclick="copyTpl(this)">📋 Copy Template</button>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">SUBJECT LINE</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--accent)">${activeTpl.subject}</div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">EMAIL BODY</div>
+      <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:13px;white-space:pre-wrap;line-height:1.7;color:var(--text);font-family:var(--fb)">${activeTpl.body}</pre>
+    </div>
+    <div style="margin-top:14px;padding:12px 14px;background:#00d4ff11;border-radius:10px;border:1px solid #00d4ff22;font-size:12px;color:var(--muted)">
+      💡 <b style="color:var(--accent)">Tip:</b> Replace [Business Name], [City], [Your Name] with actual info before sending.
+    </div>`;
+}
+function copyTpl(btn){
+  navigator.clipboard.writeText(activeTpl.body).then(()=>{
+    btn.textContent="✅ Copied!";btn.className="btn btn-green";
+    toast("📋 Copied to clipboard!");
+    setTimeout(()=>{btn.textContent="📋 Copy Template";btn.className="btn btn-primary"},2000);
+  });
+}
+
+// ═══════════════════════════════════════════
+// GUIDE
+// ═══════════════════════════════════════════
+function renderGuide(){
+  let html="";
+  GUIDE_STEPS.forEach((s,i)=>{
+    html+=`<div class="guide-step" style="animation-delay:${i*.07}s">
+      <div class="step-num" style="background:${s.color}18;border:2px solid ${s.color}40;color:${s.color}">${s.n}</div>
+      <div class="card" style="flex:1;padding:16px 20px">
+        <div style="font-family:var(--fh);font-size:16px;font-weight:700;margin-bottom:6px;color:${s.color}">${s.title}</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px">${s.desc}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${s.tips.map(t=>`<span class="tag" style="background:${s.color}18;color:${s.color};border:1px solid ${s.color}30">✓ ${t}</span>`).join("")}
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById("guide-steps").innerHTML=html;
+}
+
+// ═══════════════════════════════════════════
+// IMPORT / EXPORT CSV
+// ═══════════════════════════════════════════
+function importCSV(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const lines=ev.target.result.split("\n").slice(1);
+    let added=0;
+    const leads=getLeads();
+    const existing=new Set(leads.map(l=>l.name+l.address));
+    lines.forEach(line=>{
+      if(!line.trim()) return;
+      const cols=line.split(",").map(c=>c.replace(/^"|"$/g,"").trim());
+      if(!cols[0]) return;
+      const lead={id:uid(),name:cols[0]||"",category:cols[1]||"Unknown",
+        address:cols[2]||"",phone:cols[3]||"",rating:cols[4]||"",
+        reviews:cols[5]||"",status:"Not Contacted",
+        city:cols[2]?.split(",").slice(-2,-1)[0]?.trim()||"",addedOn:now()};
+      if(!existing.has(lead.name+lead.address)){leads.push(lead);added++;}
+    });
+    saveLeads(leads);
+    renderLeadsTable();
+    renderDashboard();
+    toast(`✅ ${added} leads imported from extension!`);
+  };
+  reader.readAsText(file);
+  e.target.value="";
+}
+
+function exportLeads(){
+  const leads=getLeads();
+  if(!leads.length){toast("No leads to export!","err");return;}
+  const h="Name,Category,City,Phone,Address,Status,Rating,Added On";
+  const rows=leads.map(l=>`"${l.name}","${l.category}","${l.city}","${l.phone}","${l.address}","${l.status}","${l.rating}","${l.addedOn}"`);
+  const blob=new Blob(["\uFEFF"+[h,...rows].join("\n")],{type:"text/csv;charset=utf-8;"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`leadflow_${Date.now()}.csv`;
+  a.click();
+  toast("📥 CSV exported!");
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+renderDashboard();
+renderTemplates();
+renderGuide();
+</script>
+</body>
+</html>
